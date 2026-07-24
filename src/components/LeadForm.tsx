@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { api, LeadFormData } from '../services/api';
 import toast from 'react-hot-toast';
 import { Loader2 } from 'lucide-react';
+import { motion, AnimatePresence } from 'motion/react';
 
 const BUDGET_OPTIONS = [
   'Below ₹10,000',
@@ -20,6 +21,7 @@ export function LeadForm() {
   
   const [errors, setErrors] = useState<Partial<LeadFormData>>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [focusedField, setFocusedField] = useState<keyof LeadFormData | null>(null);
 
   const validate = (): boolean => {
     const newErrors: Partial<LeadFormData> = {};
@@ -80,101 +82,150 @@ export function LeadForm() {
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
-    // Clear error when typing
     if (errors[name as keyof LeadFormData]) {
       setErrors(prev => ({ ...prev, [name]: undefined }));
     }
   };
 
+  const inputClasses = "w-full px-4 py-3 bg-transparent border-0 border-b-2 border-gray-200 dark:border-gray-700 rounded-none focus:ring-0 focus:border-indigo-500 transition-colors dark:text-white px-0";
+
   return (
-    <form onSubmit={handleSubmit} className="space-y-6">
-      <div>
-        <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-1">
-          Name
-        </label>
+    <form onSubmit={handleSubmit} className="space-y-8">
+      <div className="relative group">
         <input
           type="text"
           id="name"
           name="name"
           value={formData.name}
           onChange={handleChange}
-          className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors ${
-            errors.name ? 'border-red-500' : 'border-gray-300'
-          }`}
-          placeholder="Jane Doe"
+          onFocus={() => setFocusedField('name')}
+          onBlur={() => setFocusedField(null)}
+          className={`${inputClasses} ${errors.name ? 'border-red-500' : ''}`}
+          placeholder=" "
         />
-        {errors.name && <p className="mt-1 text-sm text-red-600">{errors.name}</p>}
+        <label 
+          htmlFor="name" 
+          className={`absolute left-0 transition-all duration-200 pointer-events-none ${
+            focusedField === 'name' || formData.name ? '-top-4 text-xs text-indigo-600 dark:text-indigo-400 font-medium' : 'top-3 text-gray-500'
+          }`}
+        >
+          Full Name
+        </label>
+        <AnimatePresence>
+          {errors.name && (
+            <motion.p initial={{ opacity: 0, y: -5 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }} className="mt-1.5 text-xs text-red-500 font-medium">
+              {errors.name}
+            </motion.p>
+          )}
+        </AnimatePresence>
       </div>
 
-      <div>
-        <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
-          Email
-        </label>
+      <div className="relative group">
         <input
           type="email"
           id="email"
           name="email"
           value={formData.email}
           onChange={handleChange}
-          className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors ${
-            errors.email ? 'border-red-500' : 'border-gray-300'
-          }`}
-          placeholder="jane@example.com"
+          onFocus={() => setFocusedField('email')}
+          onBlur={() => setFocusedField(null)}
+          className={`${inputClasses} ${errors.email ? 'border-red-500' : ''}`}
+          placeholder=" "
         />
-        {errors.email && <p className="mt-1 text-sm text-red-600">{errors.email}</p>}
+        <label 
+          htmlFor="email" 
+          className={`absolute left-0 transition-all duration-200 pointer-events-none ${
+            focusedField === 'email' || formData.email ? '-top-4 text-xs text-indigo-600 dark:text-indigo-400 font-medium' : 'top-3 text-gray-500'
+          }`}
+        >
+          Work Email
+        </label>
+        <AnimatePresence>
+          {errors.email && (
+            <motion.p initial={{ opacity: 0, y: -5 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }} className="mt-1.5 text-xs text-red-500 font-medium">
+              {errors.email}
+            </motion.p>
+          )}
+        </AnimatePresence>
       </div>
 
-      <div>
-        <label htmlFor="budget" className="block text-sm font-medium text-gray-700 mb-1">
-          Budget Range
-        </label>
+      <div className="relative group">
         <select
           id="budget"
           name="budget"
           value={formData.budget}
           onChange={handleChange}
-          className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 bg-white transition-colors ${
-            errors.budget ? 'border-red-500' : 'border-gray-300'
-          }`}
+          onFocus={() => setFocusedField('budget')}
+          onBlur={() => setFocusedField(null)}
+          className={`${inputClasses} ${errors.budget ? 'border-red-500' : ''} ${!formData.budget ? 'text-transparent' : ''} appearance-none cursor-pointer`}
         >
-          <option value="" disabled>Select a budget</option>
+          <option value="" disabled className="text-gray-500">Select a budget</option>
           {BUDGET_OPTIONS.map(option => (
-            <option key={option} value={option}>{option}</option>
+            <option key={option} value={option} className="text-gray-900 dark:text-white">{option}</option>
           ))}
         </select>
-        {errors.budget && <p className="mt-1 text-sm text-red-600">{errors.budget}</p>}
+        <label 
+          htmlFor="budget" 
+          className={`absolute left-0 transition-all duration-200 pointer-events-none ${
+            focusedField === 'budget' || formData.budget ? '-top-4 text-xs text-indigo-600 dark:text-indigo-400 font-medium' : 'top-3 text-gray-500'
+          }`}
+        >
+          Project Budget
+        </label>
+        <div className="absolute right-0 top-3 pointer-events-none">
+          <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path></svg>
+        </div>
+        <AnimatePresence>
+          {errors.budget && (
+            <motion.p initial={{ opacity: 0, y: -5 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }} className="mt-1.5 text-xs text-red-500 font-medium">
+              {errors.budget}
+            </motion.p>
+          )}
+        </AnimatePresence>
       </div>
 
-      <div>
-        <label htmlFor="message" className="block text-sm font-medium text-gray-700 mb-1">
-          Message
-        </label>
+      <div className="relative group pt-4">
         <textarea
           id="message"
           name="message"
           value={formData.message}
           onChange={handleChange}
-          rows={4}
-          className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors ${
-            errors.message ? 'border-red-500' : 'border-gray-300'
-          }`}
-          placeholder="Tell us about your project..."
+          onFocus={() => setFocusedField('message')}
+          onBlur={() => setFocusedField(null)}
+          rows={3}
+          className={`${inputClasses} resize-none ${errors.message ? 'border-red-500' : ''}`}
+          placeholder=" "
         />
-        {errors.message && <p className="mt-1 text-sm text-red-600">{errors.message}</p>}
+        <label 
+          htmlFor="message" 
+          className={`absolute left-0 transition-all duration-200 pointer-events-none ${
+            focusedField === 'message' || formData.message ? 'top-0 text-xs text-indigo-600 dark:text-indigo-400 font-medium' : 'top-7 text-gray-500'
+          }`}
+        >
+          How can we help you?
+        </label>
+        <AnimatePresence>
+          {errors.message && (
+            <motion.p initial={{ opacity: 0, y: -5 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }} className="mt-1.5 text-xs text-red-500 font-medium">
+              {errors.message}
+            </motion.p>
+          )}
+        </AnimatePresence>
       </div>
 
       <button
         type="submit"
         disabled={isSubmitting}
-        className="w-full bg-indigo-600 text-white font-semibold py-3 px-6 rounded-lg hover:bg-indigo-700 transition-colors disabled:opacity-70 disabled:cursor-not-allowed flex items-center justify-center shadow-sm"
+        className="group relative w-full flex justify-center items-center py-4 px-6 border border-transparent text-sm font-bold rounded-xl text-white bg-gray-900 dark:bg-white dark:text-gray-900 hover:scale-[1.02] active:scale-[0.98] focus:outline-none disabled:opacity-70 shadow-lg shadow-gray-900/20 dark:shadow-white/10 transition-all duration-200 overflow-hidden mt-6"
       >
+        <div className="absolute inset-0 bg-gradient-to-r from-indigo-500 to-purple-500 opacity-0 group-hover:opacity-20 dark:group-hover:opacity-10 transition-opacity"></div>
         {isSubmitting ? (
           <>
             <Loader2 className="w-5 h-5 mr-2 animate-spin" />
-            Sending...
+            Sending Request...
           </>
         ) : (
-          'Submit Request'
+          'Get in touch'
         )}
       </button>
     </form>

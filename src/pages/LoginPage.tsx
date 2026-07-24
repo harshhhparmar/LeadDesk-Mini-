@@ -4,12 +4,15 @@ import { useAuth } from '../context/AuthContext';
 import { auth } from '../lib/firebase';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import toast from 'react-hot-toast';
-import { Loader2, Lock } from 'lucide-react';
+import { Loader2, Lock, ArrowLeft } from 'lucide-react';
+import { motion } from 'motion/react';
+import { Link } from 'react-router';
 
 export function LoginPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
+  const [focusedInput, setFocusedInput] = useState<string | null>(null);
   
   const { user } = useAuth();
   const navigate = useNavigate();
@@ -35,24 +38,46 @@ export function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8 bg-gray-50">
-      <div className="max-w-md w-full space-y-8 bg-white p-8 rounded-2xl shadow-sm border border-gray-100">
-        <div>
-          <div className="mx-auto w-12 h-12 bg-indigo-100 rounded-xl flex items-center justify-center mb-4">
-            <Lock className="w-6 h-6 text-indigo-600" />
+    <motion.div 
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      className="min-h-screen flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8 relative z-10"
+    >
+      <Link to="/" className="absolute top-8 left-8 flex items-center gap-2 text-sm font-medium text-gray-500 hover:text-gray-900 dark:hover:text-white transition-colors">
+        <ArrowLeft className="w-4 h-4" />
+        Back to home
+      </Link>
+      
+      <motion.div 
+        initial={{ y: 20, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        transition={{ duration: 0.5, ease: "easeOut" }}
+        className="max-w-md w-full space-y-8 glass p-10 rounded-[2rem] shadow-2xl relative overflow-hidden"
+      >
+        <div className="absolute top-0 right-0 w-32 h-32 bg-indigo-500/10 blur-2xl rounded-full pointer-events-none"></div>
+        
+        <div className="relative z-10">
+          <div className="mx-auto w-14 h-14 bg-indigo-50 dark:bg-indigo-500/10 rounded-2xl flex items-center justify-center mb-6 shadow-sm border border-indigo-100 dark:border-indigo-500/20">
+            <Lock className="w-6 h-6 text-indigo-600 dark:text-indigo-400" />
           </div>
-          <h2 className="text-center text-3xl font-extrabold text-gray-900">
-            Admin Login
+          <h2 className="text-center text-3xl font-bold text-gray-900 dark:text-white tracking-tight">
+            Welcome back
           </h2>
-          <p className="mt-2 text-center text-sm text-gray-600">
-            Access the LeadDesk Mini dashboard
+          <p className="mt-3 text-center text-sm text-gray-600 dark:text-gray-400 font-light">
+            Sign in to access your dashboard
           </p>
         </div>
         
-        <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
-          <div className="space-y-4">
-            <div>
-              <label htmlFor="email-address" className="block text-sm font-medium text-gray-700 mb-1">
+        <form className="mt-8 space-y-6 relative z-10" onSubmit={handleSubmit}>
+          <div className="space-y-5">
+            <div className="relative">
+              <label 
+                htmlFor="email-address" 
+                className={`absolute left-4 transition-all duration-200 pointer-events-none ${
+                  focusedInput === 'email' || email ? '-top-2.5 text-xs bg-white dark:bg-gray-900 px-1 text-indigo-600 dark:text-indigo-400' : 'top-3 text-sm text-gray-500'
+                }`}
+              >
                 Email address
               </label>
               <input
@@ -63,12 +88,19 @@ export function LoginPage() {
                 required
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="appearance-none relative block w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm transition-colors"
-                placeholder="admin@leaddesk.com"
+                onFocus={() => setFocusedInput('email')}
+                onBlur={() => setFocusedInput(null)}
+                className="appearance-none block w-full px-4 py-3 border border-gray-300 dark:border-gray-700 rounded-xl bg-transparent focus:outline-none focus:ring-2 focus:ring-indigo-500/50 focus:border-indigo-500 sm:text-sm transition-all dark:text-white"
               />
             </div>
-            <div>
-              <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-1">
+            
+            <div className="relative">
+              <label 
+                htmlFor="password" 
+                className={`absolute left-4 transition-all duration-200 pointer-events-none ${
+                  focusedInput === 'password' || password ? '-top-2.5 text-xs bg-white dark:bg-gray-900 px-1 text-indigo-600 dark:text-indigo-400' : 'top-3 text-sm text-gray-500'
+                }`}
+              >
                 Password
               </label>
               <input
@@ -79,8 +111,9 @@ export function LoginPage() {
                 required
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="appearance-none relative block w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm transition-colors"
-                placeholder="••••••••"
+                onFocus={() => setFocusedInput('password')}
+                onBlur={() => setFocusedInput(null)}
+                className="appearance-none block w-full px-4 py-3 border border-gray-300 dark:border-gray-700 rounded-xl bg-transparent focus:outline-none focus:ring-2 focus:ring-indigo-500/50 focus:border-indigo-500 sm:text-sm transition-all dark:text-white"
               />
             </div>
           </div>
@@ -89,17 +122,18 @@ export function LoginPage() {
             <button
               type="submit"
               disabled={loading}
-              className="group relative w-full flex justify-center py-3 px-4 border border-transparent text-sm font-medium rounded-lg text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-70 shadow-sm transition-all"
+              className="group relative w-full flex justify-center items-center py-3.5 px-4 border border-transparent text-sm font-semibold rounded-xl text-white bg-gray-900 dark:bg-white dark:text-gray-900 hover:scale-[1.02] active:scale-[0.98] focus:outline-none disabled:opacity-70 shadow-lg shadow-gray-900/10 dark:shadow-white/10 transition-all duration-200 overflow-hidden"
             >
+              <div className="absolute inset-0 bg-gradient-to-r from-indigo-500 to-purple-500 opacity-0 group-hover:opacity-10 transition-opacity"></div>
               {loading ? (
                 <Loader2 className="w-5 h-5 animate-spin" />
               ) : (
-                'Sign in'
+                'Sign in to dashboard'
               )}
             </button>
           </div>
         </form>
-      </div>
-    </div>
+      </motion.div>
+    </motion.div>
   );
 }
