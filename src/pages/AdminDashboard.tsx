@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { api, Lead } from '../services/api';
+import { useAuth } from '../context/AuthContext';
 import { 
   Search, 
   Inbox, 
@@ -8,7 +9,8 @@ import {
   Clock, 
   MoreVertical,
   ArrowUpDown,
-  RefreshCw
+  RefreshCw,
+  LogOut
 } from 'lucide-react';
 import toast from 'react-hot-toast';
 
@@ -16,6 +18,8 @@ export function AdminDashboard() {
   const [leads, setLeads] = useState<Lead[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
+  
+  const { logout, user } = useAuth();
   
   // Pagination
   const [currentPage, setCurrentPage] = useState(1);
@@ -96,7 +100,9 @@ export function AdminDashboard() {
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <h1 className="text-2xl font-bold text-gray-900">Lead Dashboard</h1>
-          <p className="text-gray-500 text-sm mt-1">Manage and track your incoming leads</p>
+          <p className="text-gray-500 text-sm mt-1">
+            Welcome back, <span className="font-medium text-gray-700">{user?.name || 'Admin'}</span>
+          </p>
         </div>
         <div className="flex items-center gap-2">
           <button 
@@ -105,6 +111,14 @@ export function AdminDashboard() {
             title="Refresh"
           >
             <RefreshCw className="w-5 h-5" />
+          </button>
+          <button 
+            onClick={logout}
+            className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-red-600 hover:text-red-700 hover:bg-red-50 rounded-lg transition-colors border border-transparent hover:border-red-100"
+            title="Logout"
+          >
+            <LogOut className="w-4 h-4" />
+            Logout
           </button>
         </div>
       </div>

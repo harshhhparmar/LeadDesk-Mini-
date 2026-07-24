@@ -1,3 +1,6 @@
+import { db } from '../lib/firebase';
+import { collection, addDoc, getDocs, doc, updateDoc, query, orderBy, Timestamp } from 'firebase/firestore';
+
 export interface Lead {
   _id: string;
   name: string;
@@ -18,46 +21,57 @@ export interface LeadFormData {
 
 export const api = {
   createLead: async (data: LeadFormData): Promise<Lead> => {
-    const res = await fetch('/api/leads', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(data),
+    const docRef = await addDoc(collection(db, 'leads'), {
+      ...data,
+      status: 'New',
+      createdAt: Timestamp.now(),
+      updatedAt: Timestamp.now(),
     });
     
-    if (!res.ok) {
-      const error = await res.json();
-      throw new Error(error.error || 'Failed to submit form');
-    }
-    
-    return res.json();
+    return {
+      _id: docRef.id,
+      ...data,
+      status: 'New',
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+    };
   },
   
   getLeads: async (search?: string): Promise<Lead[]> => {
-    const url = search ? `/api/leads?search=${encodeURIComponent(search)}` : '/api/leads';
-    const res = await fetch(url);
+    const q = query(collection(db, 'leads'), orderBy('createdAt', 'desc'));
+    const querySnapshot = await getDocs(q);
     
-    if (!res.ok) {
-      throw new Error('Failed to fetch leads');
+    let leads = querySnapshot.docs.map(doc => {
+      const data = doc.data();
+      return {
+        _id: doc.id,
+        ...data,
+        createdAt: data.createdAt?.toDate().toISOString() || new Date().toISOString(),
+        updatedAt: data.updatedAt?.toDate().toISOString() || new Date().toISOString(),
+      } as Lead;
+    });
+
+    if (search) {
+      const searchLower = search.toLowerCase();
+      leads = leads.filter(lead => 
+        lead.name.toLowerCase().includes(searchLower) ||
+        lead.email.toLowerCase().includes(searchLower) ||
+        lead.message.toLowerCase().includes(searchLower)
+      );
     }
     
-    return res.json();
+    return leads;
   },
   
   updateLeadStatus: async (id: string, status: 'New' | 'Contacted' | 'Closed'): Promise<Lead> => {
-    const res = await fetch(`/api/leads/${id}`, {
-      method: 'PATCH',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ status }),
+    const leadRef = doc(db, 'leads', id);
+    await updateDoc(leadRef, {
+      status,
+      updatedAt: Timestamp.now(),
     });
     
-    if (!res.ok) {
-      throw new Error('Failed to update status');
-    }
-    
-    return res.json();
+    // We don't need to return the full lead for the current UI to work
+    // as the UI only needs the status updated, but we return a partial
+    return { _id: id, status } as unknown as Lead;
   }
 };

@@ -1,0 +1,15 @@
+{
+  "schema": {
+    "leads": {
+      "fields": {
+        "name": { "type": "string" },
+        "email": { "type": "string" },
+        "budget": { "type": "string" },
+        "message": { "type": "string" },
+        "status": { "type": "string" },
+        "createdAt": { "type": "timestamp" },
+        "updatedAt": { "type": "timestamp" }
+      }
+    }
+  }
+}
