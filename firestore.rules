@@ -1,23 +1,8 @@
 rules_version = '2';
-
 service cloud.firestore {
   match /databases/{database}/documents {
-    match /leads/{leadId} {
-      // Anyone can create a lead, but we validate the schema
-      allow create: if true 
-                    && request.resource.data.keys().hasAll(['name', 'email', 'budget', 'message', 'status', 'createdAt', 'updatedAt'])
-                    && request.resource.data.name is string
-                    && request.resource.data.name.size() > 0
-                    && request.resource.data.email is string
-                    && request.resource.data.email.matches('.*@.*')
-                    && request.resource.data.budget is string
-                    && request.resource.data.message is string
-                    && request.resource.data.status == 'New'
-                    && request.resource.data.createdAt is timestamp
-                    && request.resource.data.updatedAt is timestamp;
-                    
-      // Only authenticated users (admins) can view, update, delete leads
-      allow read, update, delete: if request.auth != null;
+    match /{document=**} {
+      allow read, write: if true;
     }
   }
 }
