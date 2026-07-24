@@ -157,11 +157,11 @@ export function LeadForm() {
           onChange={handleChange}
           onFocus={() => setFocusedField('budget')}
           onBlur={() => setFocusedField(null)}
-          className={`${inputClasses} ${errors.budget ? 'border-red-500' : ''} ${!formData.budget ? 'text-transparent' : ''} appearance-none cursor-pointer`}
+          className={`${inputClasses} ${errors.budget ? 'border-red-500' : ''} appearance-none cursor-pointer`}
         >
-          <option value="" disabled className="text-gray-500">Select a budget</option>
+          <option value="" disabled hidden></option>
           {BUDGET_OPTIONS.map(option => (
-            <option key={option} value={option} className="text-gray-900 dark:text-white">{option}</option>
+            <option key={option} value={option} className="text-gray-900 dark:text-white bg-white dark:bg-gray-900">{option}</option>
           ))}
         </select>
         <label 

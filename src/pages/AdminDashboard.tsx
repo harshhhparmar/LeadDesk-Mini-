@@ -120,9 +120,7 @@ export function AdminDashboard() {
       >
         <div className="h-16 flex items-center px-6 border-b border-gray-200/50 dark:border-gray-800/50">
           <div className="flex items-center gap-3">
-            <div className="w-8 h-8 bg-gradient-to-tr from-indigo-600 to-purple-600 rounded-lg flex items-center justify-center shadow-lg shadow-indigo-500/20">
-              <span className="text-white font-bold text-lg leading-none">L</span>
-            </div>
+            <img src="/logo.svg" alt="LeadDesk Logo" className="w-9 h-9 object-contain" />
             <span className="font-bold text-lg tracking-tight text-gray-900 dark:text-white">LeadDesk</span>
           </div>
         </div>
@@ -216,7 +214,7 @@ export function AdminDashboard() {
               className="glass rounded-[2rem] shadow-sm border border-gray-200/50 dark:border-gray-800/50 overflow-hidden bg-white/60 dark:bg-gray-900/60"
             >
               {/* Toolbar */}
-              <div className="p-5 border-b border-gray-200/50 dark:border-gray-800/50 flex flex-col sm:flex-row gap-4 justify-between items-center bg-gray-50/30 dark:bg-gray-900/30">
+              <div className="p-5 border-b border-gray-200/50 dark:border-gray-800/50 flex flex-col sm:flex-row flex-wrap gap-4 justify-between items-center bg-gray-50/30 dark:bg-gray-900/30">
                 <div className="relative w-full sm:w-96 group">
                   <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 group-focus-within:text-indigo-500 transition-colors" />
                   <input
@@ -338,7 +336,7 @@ export function AdminDashboard() {
 
               {/* Pagination */}
               {!loading && leads.length > 0 && (
-                <div className="px-6 py-4 border-t border-gray-200/50 dark:border-gray-800/50 flex items-center justify-between bg-gray-50/30 dark:bg-gray-900/30">
+                <div className="px-6 py-4 border-t border-gray-200/50 dark:border-gray-800/50 flex flex-col sm:flex-row flex-wrap items-center justify-between gap-4 bg-gray-50/30 dark:bg-gray-900/30">
                   <p className="text-sm text-gray-700 dark:text-gray-400">
                     Showing <span className="font-medium text-gray-900 dark:text-white">{((currentPage - 1) * itemsPerPage) + 1}</span> to{' '}
                     <span className="font-medium text-gray-900 dark:text-white">{Math.min(currentPage * itemsPerPage, leads.length)}</span> of{' '}

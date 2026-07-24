@@ -36,9 +36,7 @@ export function LandingPage() {
       <nav className="fixed top-0 left-0 right-0 border-b border-gray-200/50 dark:border-gray-800/50 bg-white/70 dark:bg-gray-950/70 backdrop-blur-xl z-50 transition-all duration-300">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
           <Link to="/" className="flex items-center gap-3 group">
-            <div className="w-9 h-9 bg-gradient-to-tr from-indigo-600 to-purple-600 rounded-xl flex items-center justify-center shadow-lg shadow-indigo-500/20 group-hover:scale-105 transition-transform duration-300">
-              <span className="text-white font-bold text-xl leading-none">L</span>
-            </div>
+            <img src="/logo.svg" alt="LeadDesk Mini Logo" className="w-10 h-10 object-contain group-hover:scale-105 transition-transform duration-300" />
             <span className="font-bold text-xl tracking-tight text-gray-900 dark:text-white">LeadDesk Mini</span>
           </Link>
           <div className="flex items-center gap-6">
@@ -82,7 +80,7 @@ export function LandingPage() {
             A premium, lightning-fast CRM built for modern sales teams. Capture, organize, and convert leads with unparalleled efficiency.
           </motion.p>
           
-          <motion.div variants={fadeIn} className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4 pt-4">
+          <motion.div variants={fadeIn} className="flex flex-col sm:flex-row flex-wrap items-center justify-center lg:justify-start gap-4 pt-4">
             <a 
               href="#contact" 
               className="group relative w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-gray-900 dark:bg-white text-white dark:text-gray-900 px-8 py-4 rounded-full font-semibold transition-all hover:scale-105 active:scale-95 shadow-xl shadow-gray-900/20 dark:shadow-white/10 overflow-hidden"
@@ -202,7 +200,7 @@ export function LandingPage() {
 
       {/* Contact Section */}
       <section id="contact" className="py-24 relative z-10">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col lg:flex-row gap-16 items-center">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col lg:flex-row flex-wrap gap-16 items-center">
           <motion.div 
             initial={{ opacity: 0, x: -50 }}
             whileInView={{ opacity: 1, x: 0 }}

@@ -21,12 +21,18 @@ export interface LeadFormData {
 
 export const api = {
   createLead: async (data: LeadFormData): Promise<Lead> => {
-    const docRef = await addDoc(collection(db, 'leads'), {
+    const timeoutPromise = new Promise((_, reject) => {
+      setTimeout(() => reject(new Error('Request timed out. Please check your connection and try again.')), 10000);
+    });
+
+    const addDocPromise = addDoc(collection(db, 'leads'), {
       ...data,
       status: 'New',
       createdAt: Timestamp.now(),
       updatedAt: Timestamp.now(),
     });
+
+    const docRef = await Promise.race([addDocPromise, timeoutPromise]) as any;
     
     return {
       _id: docRef.id,
@@ -39,9 +45,14 @@ export const api = {
   
   getLeads: async (search?: string): Promise<Lead[]> => {
     const q = query(collection(db, 'leads'), orderBy('createdAt', 'desc'));
-    const querySnapshot = await getDocs(q);
     
-    let leads = querySnapshot.docs.map(doc => {
+    const timeoutPromise = new Promise((_, reject) => {
+      setTimeout(() => reject(new Error('Request timed out. Please check your connection and try again.')), 10000);
+    });
+
+    const querySnapshot = await Promise.race([getDocs(q), timeoutPromise]) as any;
+    
+    let leads = querySnapshot.docs.map((doc: any) => {
       const data = doc.data();
       return {
         _id: doc.id,
@@ -65,10 +76,17 @@ export const api = {
   
   updateLeadStatus: async (id: string, status: 'New' | 'Contacted' | 'Closed'): Promise<Lead> => {
     const leadRef = doc(db, 'leads', id);
-    await updateDoc(leadRef, {
+    
+    const timeoutPromise = new Promise((_, reject) => {
+      setTimeout(() => reject(new Error('Request timed out. Please check your connection and try again.')), 10000);
+    });
+
+    const updatePromise = updateDoc(leadRef, {
       status,
       updatedAt: Timestamp.now(),
     });
+
+    await Promise.race([updatePromise, timeoutPromise]);
     
     // We don't need to return the full lead for the current UI to work
     // as the UI only needs the status updated, but we return a partial
