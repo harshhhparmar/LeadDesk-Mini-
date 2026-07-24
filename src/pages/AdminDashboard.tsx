@@ -51,7 +51,7 @@ export function AdminDashboard() {
     
     // Optimistic update
     setLeads(prev => prev.map(lead => 
-      lead.id === id ? { ...lead, status: nextStatus } : lead
+      lead._id === id ? { ...lead, status: nextStatus } : lead
     ));
     
     try {
@@ -197,7 +197,7 @@ export function AdminDashboard() {
                 </tr>
               ) : (
                 paginatedLeads.map((lead) => (
-                  <tr key={lead.id} className="hover:bg-gray-50 transition-colors">
+                  <tr key={lead._id} className="hover:bg-gray-50 transition-colors">
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="flex flex-col">
                         <span className="text-sm font-medium text-gray-900">{lead.name}</span>
@@ -223,7 +223,7 @@ export function AdminDashboard() {
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       <button
-                        onClick={() => handleStatusChange(lead.id, lead.status)}
+                        onClick={() => handleStatusChange(lead._id, lead.status)}
                         className="group flex items-center gap-2 hover:opacity-80 transition-opacity"
                         title="Click to change status"
                       >

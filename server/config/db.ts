@@ -1,22 +1,21 @@
-import { getApps, initializeApp, applicationDefault } from 'firebase-admin/app';
-import { getFirestore } from 'firebase-admin/firestore';
+import mongoose from 'mongoose';
 
 export const connectDB = async () => {
   try {
-    if (!getApps().length) {
-      initializeApp({
-        credential: applicationDefault()
-      });
+    const uri = process.env.MONGODB_URI;
+    if (!uri) {
+      console.warn("MONGODB_URI environment variable is missing. Please configure it in your secrets.");
+      return;
     }
-    console.log('Firebase Admin SDK initialized successfully');
+    
+    const conn = await mongoose.connect(uri, {
+      serverSelectionTimeoutMS: 5000
+    });
+    console.log(`MongoDB Connected: ${conn.connection.host}`);
   } catch (error) {
-    console.error(`Error: ${(error as Error).message}`);
+    console.error(`MongoDB Connection Error: ${(error as Error).message}`);
     if (process.env.NODE_ENV === 'production') {
       process.exit(1);
     }
   }
-};
-
-export const getDB = () => {
-  return getFirestore();
 };

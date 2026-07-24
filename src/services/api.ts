@@ -1,5 +1,5 @@
 export interface Lead {
-  id: string;
+  _id: string;
   name: string;
   email: string;
   budget: string;

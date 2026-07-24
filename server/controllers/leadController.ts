@@ -1,59 +1,46 @@
 import { Request, Response } from 'express';
-import { getDB } from '../config/db';
-import { ILead, BUDGET_OPTIONS, STATUS_OPTIONS } from '../models/Lead';
+import { Lead } from '../models/Lead';
+import mongoose from 'mongoose';
+
+const checkDbConnection = (res: Response) => {
+  if (mongoose.connection.readyState !== 1) {
+    res.status(503).json({ error: 'Database connection not established. Please configure MONGODB_URI in your secrets.' });
+    return false;
+  }
+  return true;
+};
 
 // @desc    Create a new lead
 // @route   POST /api/leads
 export const createLead = async (req: Request, res: Response): Promise<void> => {
   try {
+    if (!checkDbConnection(res)) return;
+
     const { name, email, budget, message } = req.body;
+
     
     // Server-side validation
     if (!name || !email || !budget || !message) {
       res.status(400).json({ error: 'Please provide all required fields' });
       return;
     }
-    
-    if (name.length < 2) {
-      res.status(400).json({ error: 'Name must be at least 2 characters' });
-      return;
-    }
-    
-    if (!/^\S+@\S+\.\S+$/.test(email)) {
-      res.status(400).json({ error: 'Please use a valid email address' });
-      return;
-    }
-    
-    if (!BUDGET_OPTIONS.includes(budget)) {
-      res.status(400).json({ error: 'Invalid budget range' });
-      return;
-    }
-    
-    if (message.length < 10) {
-      res.status(400).json({ error: 'Message must be at least 10 characters' });
-      return;
-    }
 
-    const db = getDB();
-    const leadsRef = db.collection('leads');
-    
-    const now = new Date().toISOString();
-    
-    const newLead = {
+    const lead = await Lead.create({
       name,
       email,
       budget,
       message,
-      status: 'New',
-      createdAt: now,
-      updatedAt: now,
-    };
+    });
 
-    const docRef = await leadsRef.add(newLead);
-    
-    res.status(201).json({ id: docRef.id, ...newLead });
+    res.status(201).json(lead);
   } catch (error: any) {
-    res.status(500).json({ error: 'Server error creating lead' });
+    if (error.name === 'ValidationError') {
+      const messages = Object.values(error.errors).map((val: any) => val.message);
+      res.status(400).json({ error: messages.join(', ') });
+    } else {
+      console.error('Error creating lead:', error);
+      res.status(500).json({ error: 'Server error creating lead' });
+    }
   }
 };
 
@@ -61,27 +48,26 @@ export const createLead = async (req: Request, res: Response): Promise<void> => 
 // @route   GET /api/leads
 export const getLeads = async (req: Request, res: Response): Promise<void> => {
   try {
-    const search = (req.query.search as string || '').toLowerCase();
-    
-    const db = getDB();
-    const snapshot = await db.collection('leads').orderBy('createdAt', 'desc').get();
-    
-    let leads: ILead[] = [];
-    
-    snapshot.forEach((doc) => {
-      leads.push({ id: doc.id, ...doc.data() } as ILead);
-    });
+    if (!checkDbConnection(res)) return;
 
+    const search = req.query.search as string;
+    
+    let query = {};
     if (search) {
-      leads = leads.filter(lead => 
-        lead.name.toLowerCase().includes(search) || 
-        lead.email.toLowerCase().includes(search) || 
-        lead.message.toLowerCase().includes(search)
-      );
+      query = {
+        $or: [
+          { name: { $regex: search, $options: 'i' } },
+          { email: { $regex: search, $options: 'i' } },
+          { message: { $regex: search, $options: 'i' } },
+        ],
+      };
     }
 
+    // Sort by newest first
+    const leads = await Lead.find(query).sort({ createdAt: -1 });
     res.json(leads);
   } catch (error) {
+    console.error('Error fetching leads:', error);
     res.status(500).json({ error: 'Server error fetching leads' });
   }
 };
@@ -90,31 +76,30 @@ export const getLeads = async (req: Request, res: Response): Promise<void> => {
 // @route   PATCH /api/leads/:id
 export const updateLeadStatus = async (req: Request, res: Response): Promise<void> => {
   try {
+    if (!checkDbConnection(res)) return;
+
     const { status } = req.body;
     const { id } = req.params;
 
-    if (!STATUS_OPTIONS.includes(status)) {
+    if (!['New', 'Contacted', 'Closed'].includes(status)) {
       res.status(400).json({ error: 'Invalid status value' });
       return;
     }
 
-    const db = getDB();
-    const docRef = db.collection('leads').doc(id);
-    
-    const doc = await docRef.get();
-    if (!doc.exists) {
+    const lead = await Lead.findByIdAndUpdate(
+      id,
+      { status },
+      { new: true, runValidators: true }
+    );
+
+    if (!lead) {
       res.status(404).json({ error: 'Lead not found' });
       return;
     }
 
-    await docRef.update({ 
-      status, 
-      updatedAt: new Date().toISOString() 
-    });
-
-    const updatedDoc = await docRef.get();
-    res.json({ id: updatedDoc.id, ...updatedDoc.data() });
+    res.json(lead);
   } catch (error) {
+    console.error('Error updating lead:', error);
     res.status(500).json({ error: 'Server error updating lead' });
   }
 };
