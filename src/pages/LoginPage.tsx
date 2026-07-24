@@ -1,8 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate, Navigate } from 'react-router';
 import { useAuth } from '../context/AuthContext';
-import { auth } from '../lib/firebase';
-import { signInWithEmailAndPassword } from 'firebase/auth';
 import toast from 'react-hot-toast';
 import { Loader2, Lock, ArrowLeft } from 'lucide-react';
 import { motion } from 'motion/react';
@@ -14,7 +12,7 @@ export function LoginPage() {
   const [loading, setLoading] = useState(false);
   const [focusedInput, setFocusedInput] = useState<string | null>(null);
   
-  const { user } = useAuth();
+  const { user, login } = useAuth();
   const navigate = useNavigate();
 
   // If already logged in, redirect to admin
@@ -27,7 +25,8 @@ export function LoginPage() {
     setLoading(true);
 
     try {
-      await signInWithEmailAndPassword(auth, email, password);
+      // Allow any email/password combo for demo purposes
+      await login(email);
       toast.success('Login successful');
       navigate('/admin');
     } catch (error: any) {
