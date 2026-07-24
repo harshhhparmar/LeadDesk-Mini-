@@ -46,12 +46,12 @@ export function LandingPage() {
             >
               Log in
             </Link>
-            <Link 
-              to="/login" 
+            <a 
+              href="#contact" 
               className="text-sm font-medium bg-gray-900 dark:bg-white text-white dark:text-gray-900 px-5 py-2.5 rounded-full hover:scale-105 hover:shadow-lg transition-all duration-300 active:scale-95"
             >
               Get Started
-            </Link>
+            </a>
           </div>
         </div>
       </nav>
@@ -81,8 +81,8 @@ export function LandingPage() {
           </motion.p>
           
           <motion.div variants={fadeIn} className="flex flex-col sm:flex-row flex-wrap items-center justify-center lg:justify-start gap-4 pt-4">
-            <Link 
-              to="/login" 
+            <a 
+              href="#contact" 
               className="group relative w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-gray-900 dark:bg-white text-white dark:text-gray-900 px-8 py-4 rounded-full font-semibold transition-all hover:scale-105 active:scale-95 shadow-xl shadow-gray-900/20 dark:shadow-white/10 overflow-hidden"
             >
               <span className="relative z-10 flex items-center gap-2">
@@ -90,7 +90,7 @@ export function LandingPage() {
                 <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
               </span>
               <div className="absolute inset-0 bg-gradient-to-r from-indigo-500 to-purple-500 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-            </Link>
+            </a>
             <p className="text-sm text-gray-500 dark:text-gray-400 font-medium">No credit card required.</p>
           </motion.div>
         </motion.div>

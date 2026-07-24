@@ -1,8 +1,6 @@
 import { useEffect, useState } from 'react';
 import { api, Lead } from '../services/api';
 import { useAuth } from '../context/AuthContext';
-import { auth } from '../lib/firebase';
-import { signOut } from 'firebase/auth';
 import { useNavigate } from 'react-router';
 import toast from 'react-hot-toast';
 import { motion, AnimatePresence } from 'motion/react';
@@ -17,7 +15,8 @@ import {
   Users,
   LayoutDashboard,
   Settings,
-  Bell
+  Bell,
+  Loader2
 } from 'lucide-react';
 
 export function AdminDashboard() {
@@ -27,7 +26,7 @@ export function AdminDashboard() {
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
   
-  const { user } = useAuth();
+  const { user, logout } = useAuth();
   const navigate = useNavigate();
 
   const fetchLeads = async (search?: string) => {
@@ -52,7 +51,7 @@ export function AdminDashboard() {
 
   const handleLogout = async () => {
     try {
-      await signOut(auth);
+      await logout();
       toast.success('Logged out successfully');
       navigate('/login');
     } catch (error: any) {

@@ -1,0 +1,14 @@
+{
+  "leads": [
+    {
+      "_id": "057d3923-578c-4dfe-82ec-97c65d35b68e",
+      "name": "Jane Doe",
+      "email": "jane@example.com",
+      "message": "Hello",
+      "budget": "Below ₹10,000",
+      "status": "New",
+      "createdAt": "2026-07-24T16:20:34.469Z",
+      "updatedAt": "2026-07-24T16:20:34.469Z"
+    }
+  ]
+}
