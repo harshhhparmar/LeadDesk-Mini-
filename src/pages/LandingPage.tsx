@@ -35,11 +35,11 @@ export function LandingPage() {
       {/* Navigation */}
       <nav className="fixed top-0 left-0 right-0 border-b border-gray-200/50 dark:border-gray-800/50 bg-white/70 dark:bg-gray-950/70 backdrop-blur-xl z-50 transition-all duration-300">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
-          <Link to="/" className="flex items-center gap-3 group">
-            <img src="/logo.svg" alt="LeadDesk Mini Logo" className="w-10 h-10 object-contain group-hover:scale-105 transition-transform duration-300" />
-            <span className="font-bold text-xl tracking-tight text-gray-900 dark:text-white">LeadDesk Mini</span>
+          <Link to="/" className="flex items-center gap-2 sm:gap-3 group shrink-0">
+            <img src="/logo.svg" alt="LeadDesk Mini Logo" className="w-8 h-8 sm:w-10 sm:h-10 object-contain group-hover:scale-105 transition-transform duration-300" />
+            <span className="font-bold text-lg sm:text-xl tracking-tight text-gray-900 dark:text-white">LeadDesk Mini</span>
           </Link>
-          <div className="flex items-center gap-6">
+          <div className="flex items-center gap-3 sm:gap-6">
             <Link 
               to="/login" 
               className="text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors"
@@ -48,7 +48,7 @@ export function LandingPage() {
             </Link>
             <a 
               href="#contact" 
-              className="text-sm font-medium bg-gray-900 dark:bg-white text-white dark:text-gray-900 px-5 py-2.5 rounded-full hover:scale-105 hover:shadow-lg transition-all duration-300 active:scale-95"
+              className="text-xs sm:text-sm font-medium bg-gray-900 dark:bg-white text-white dark:text-gray-900 px-4 py-2 sm:px-5 sm:py-2.5 rounded-full hover:scale-105 hover:shadow-lg transition-all duration-300 active:scale-95 whitespace-nowrap"
             >
               Get Started
             </a>
@@ -115,10 +115,9 @@ export function LandingPage() {
       {/* Stats Section */}
       <section className="py-16 relative z-10 border-y border-gray-200/50 dark:border-gray-800/50 bg-white/30 dark:bg-gray-900/30 backdrop-blur-md">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-8">
             <Counter value={99} suffix="%" label="Customer Satisfaction" />
             <Counter value={5} suffix="x" label="Faster Deal Closing" />
-            <Counter value={10} suffix="k+" label="Active Users" />
             <Counter value={24} suffix="/7" label="Premium Support" />
           </div>
         </div>
