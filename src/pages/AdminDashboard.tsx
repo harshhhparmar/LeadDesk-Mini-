@@ -26,6 +26,8 @@ export function AdminDashboard() {
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
   
+  const [currentTab, setCurrentTab] = useState<'dashboard' | 'settings'>('dashboard');
+
   const { user, logout } = useAuth();
   const navigate = useNavigate();
 
@@ -125,14 +127,18 @@ export function AdminDashboard() {
         </div>
         
         <div className="flex-1 py-6 px-4 space-y-1">
-          <a href="#" className="flex items-center gap-3 px-3 py-2.5 rounded-xl bg-indigo-50 dark:bg-indigo-500/10 text-indigo-700 dark:text-indigo-300 font-medium transition-colors">
+          <button 
+            onClick={() => setCurrentTab('dashboard')}
+            className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl font-medium transition-colors ${currentTab === 'dashboard' ? 'bg-indigo-50 dark:bg-indigo-500/10 text-indigo-700 dark:text-indigo-300' : 'text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800'}`}>
             <LayoutDashboard className="w-5 h-5" />
             Dashboard
-          </a>
-          <a href="#" className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 font-medium transition-colors opacity-50 cursor-not-allowed">
+          </button>
+          <button 
+            onClick={() => setCurrentTab('settings')}
+            className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl font-medium transition-colors ${currentTab === 'settings' ? 'bg-indigo-50 dark:bg-indigo-500/10 text-indigo-700 dark:text-indigo-300' : 'text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800'}`}>
             <Settings className="w-5 h-5" />
             Settings
-          </a>
+          </button>
         </div>
         
         <div className="p-4 border-t border-gray-200/50 dark:border-gray-800/50">
@@ -161,7 +167,9 @@ export function AdminDashboard() {
       <main className="flex-1 flex flex-col h-screen overflow-hidden relative z-10">
         <header className="h-16 flex items-center justify-between px-4 sm:px-6 lg:px-8 border-b border-gray-200/50 dark:border-gray-800/50 bg-white/70 dark:bg-gray-900/70 backdrop-blur-xl z-10">
           <h1 className="text-xl font-semibold text-gray-900 dark:text-white lg:hidden">LeadDesk</h1>
-          <h1 className="text-xl font-semibold text-gray-900 dark:text-white hidden lg:block">Overview</h1>
+          <h1 className="text-xl font-semibold text-gray-900 dark:text-white hidden lg:block">
+            {currentTab === 'dashboard' ? 'Overview' : 'Settings'}
+          </h1>
           <div className="flex items-center gap-4">
             <button className="w-8 h-8 flex items-center justify-center rounded-full text-gray-500 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors">
               <Bell className="w-5 h-5" />
@@ -184,8 +192,10 @@ export function AdminDashboard() {
 
         <div className="flex-1 overflow-auto p-4 sm:px-6 lg:px-8 py-8">
           <div className="max-w-7xl mx-auto space-y-8">
-            {/* Stats */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            {currentTab === 'dashboard' ? (
+              <>
+                {/* Stats */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
               {stats.map((stat, i) => (
                 <motion.div 
                   key={i} 
@@ -360,6 +370,45 @@ export function AdminDashboard() {
                 </div>
               )}
             </motion.div>
+              </>
+            ) : (
+              <motion.div 
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="glass rounded-2xl p-8 shadow-sm bg-white/60 dark:bg-gray-900/60"
+              >
+                <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-6">Account Settings</h2>
+                <div className="space-y-6 max-w-2xl">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Email Address</label>
+                    <input 
+                      type="email" 
+                      value={user?.email || ''} 
+                      disabled 
+                      className="w-full px-4 py-2 bg-gray-50 dark:bg-gray-800/50 border border-gray-200 dark:border-gray-700 rounded-xl text-gray-500 cursor-not-allowed"
+                    />
+                    <p className="mt-1.5 text-xs text-gray-500">Your email address cannot be changed at this time.</p>
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Role</label>
+                    <input 
+                      type="text" 
+                      value="Administrator" 
+                      disabled 
+                      className="w-full px-4 py-2 bg-gray-50 dark:bg-gray-800/50 border border-gray-200 dark:border-gray-700 rounded-xl text-gray-500 cursor-not-allowed"
+                    />
+                  </div>
+                  <div className="pt-4">
+                    <button 
+                      onClick={() => toast.success('Preferences saved successfully')}
+                      className="px-6 py-2 bg-gray-900 dark:bg-white text-white dark:text-gray-900 rounded-xl font-medium hover:scale-105 transition-all shadow-sm"
+                    >
+                      Save Preferences
+                    </button>
+                  </div>
+                </div>
+              </motion.div>
+            )}
           </div>
         </div>
       </main>
