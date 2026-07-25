@@ -7,18 +7,25 @@ import { v4 as uuidv4 } from 'uuid';
 
 const DB_FILE = path.join(process.cwd(), 'local_db.json');
 
-// Initialize DB file
-if (!fs.existsSync(DB_FILE)) {
-  fs.writeFileSync(DB_FILE, JSON.stringify({ leads: [] }));
-}
-
 function getDb() {
-  const data = fs.readFileSync(DB_FILE, 'utf8');
-  return JSON.parse(data);
+  try {
+    if (!fs.existsSync(DB_FILE)) {
+      fs.writeFileSync(DB_FILE, JSON.stringify({ leads: [] }));
+    }
+    const data = fs.readFileSync(DB_FILE, 'utf8');
+    return JSON.parse(data);
+  } catch (error) {
+    console.error('Error reading db:', error);
+    return { leads: [] };
+  }
 }
 
 function saveDb(data: any) {
-  fs.writeFileSync(DB_FILE, JSON.stringify(data, null, 2));
+  try {
+    fs.writeFileSync(DB_FILE, JSON.stringify(data, null, 2));
+  } catch (error) {
+    console.error('Error saving db:', error);
+  }
 }
 
 async function startServer() {

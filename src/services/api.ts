@@ -24,7 +24,8 @@ export const api = {
       body: JSON.stringify(data),
     });
     if (!res.ok) {
-      throw new Error('Request timed out or failed. Please check your connection and try again.');
+      const errText = await res.text().catch(() => 'No text');
+      throw new Error(`Failed to send request (${res.status}): ${errText}`);
     }
     return res.json();
   },

@@ -6,9 +6,49 @@
       "email": "jane@example.com",
       "message": "Hello",
       "budget": "Below ₹10,000",
-      "status": "New",
+      "status": "Contacted",
       "createdAt": "2026-07-24T16:20:34.469Z",
-      "updatedAt": "2026-07-24T16:20:34.469Z"
+      "updatedAt": "2026-07-25T05:54:04.760Z"
+    },
+    {
+      "_id": "83f356d6-ffbc-437f-a6c4-3c90c4cbfedb",
+      "name": "Harsh",
+      "email": "harshhhparmar007@gmail.com",
+      "budget": "Above ₹50,000",
+      "message": "i have trading firm",
+      "status": "Contacted",
+      "createdAt": "2026-07-25T05:52:27.320Z",
+      "updatedAt": "2026-07-25T05:53:57.025Z"
+    },
+    {
+      "_id": "74fa4502-0ecb-40e9-8a4f-a319c113ee66",
+      "name": "test",
+      "email": "test@test.com",
+      "budget": "12",
+      "message": "test",
+      "status": "New",
+      "createdAt": "2026-07-25T05:59:36.535Z",
+      "updatedAt": "2026-07-25T05:59:36.535Z"
+    },
+    {
+      "_id": "28278248-76c9-4060-9e6a-d26e620899c8",
+      "name": "test",
+      "email": "test@example.com",
+      "budget": "Below ₹10,000",
+      "message": "Testing this thing",
+      "status": "New",
+      "createdAt": "2026-07-25T06:00:18.462Z",
+      "updatedAt": "2026-07-25T06:00:18.462Z"
+    },
+    {
+      "_id": "bb52d5c5-e6b8-4b53-a2b3-db3ade8c0a14",
+      "name": "test2",
+      "email": "test@example.com",
+      "budget": "Below ₹10,000",
+      "message": "Testing this thing again",
+      "status": "New",
+      "createdAt": "2026-07-25T06:01:19.800Z",
+      "updatedAt": "2026-07-25T06:01:19.800Z"
     }
   ]
 }
