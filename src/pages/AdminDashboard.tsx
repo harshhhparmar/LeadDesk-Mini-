@@ -252,7 +252,7 @@ export function AdminDashboard() {
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-gray-200/50 dark:divide-gray-800/50">
-                    <AnimatePresence mode="popLayout">
+                    <AnimatePresence>
                       {loading ? (
                         <motion.tr
                           initial={{ opacity: 0 }}
