@@ -36,8 +36,8 @@ export function LandingPage() {
       <nav className="fixed top-0 left-0 right-0 border-b border-gray-200/50 dark:border-gray-800/50 bg-white/70 dark:bg-gray-950/70 backdrop-blur-xl z-50 transition-all duration-300">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
           <Link to="/" className="flex items-center gap-3 group">
-            <img src="/logo.svg" alt="LeanDesk Mini Logo" className="w-10 h-10 object-contain group-hover:scale-105 transition-transform duration-300" />
-            <span className="font-bold text-xl tracking-tight text-gray-900 dark:text-white">LeanDesk Mini</span>
+            <img src="/logo.svg" alt="LeadDesk Mini Logo" className="w-10 h-10 object-contain group-hover:scale-105 transition-transform duration-300" />
+            <span className="font-bold text-xl tracking-tight text-gray-900 dark:text-white">LeadDesk Mini</span>
           </Link>
           <div className="flex items-center gap-6">
             <Link 
@@ -66,7 +66,7 @@ export function LandingPage() {
         >
           <motion.div variants={fadeIn} className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-indigo-50/50 dark:bg-indigo-500/10 border border-indigo-100/50 dark:border-indigo-500/20 text-indigo-700 dark:text-indigo-300 text-sm font-medium backdrop-blur-md">
             <Sparkles className="w-4 h-4 text-indigo-500" />
-            <span>Introducing LeanDesk 2.0</span>
+            <span>Introducing LeadDesk Mini</span>
           </motion.div>
           
           <motion.h1 variants={fadeIn} className="text-5xl lg:text-7xl font-extrabold text-gray-900 dark:text-white tracking-tight leading-[1.1]">
@@ -135,7 +135,7 @@ export function LandingPage() {
             className="text-center max-w-3xl mx-auto mb-20"
           >
             <h2 className="text-4xl font-bold text-gray-900 dark:text-white mb-6 tracking-tight">Everything you need to scale</h2>
-            <p className="text-lg text-gray-600 dark:text-gray-400 font-light">Join thousands of high-performing teams using LeanDesk Mini to accelerate their sales cycle and close deals faster.</p>
+            <p className="text-lg text-gray-600 dark:text-gray-400 font-light">Join thousands of high-performing teams using LeadDesk Mini to accelerate their sales cycle and close deals faster.</p>
           </motion.div>
           
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -210,7 +210,7 @@ export function LandingPage() {
           >
             <h2 className="text-4xl lg:text-5xl font-bold text-gray-900 dark:text-white mb-6 tracking-tight">Ready to transform your sales?</h2>
             <p className="text-lg text-gray-600 dark:text-gray-400 mb-10 max-w-md font-light leading-relaxed">
-              Get in touch with our product experts to learn how LeanDesk Mini can optimize your workflow.
+              Get in touch with our product experts to learn how LeadDesk Mini can optimize your workflow.
             </p>
             
             <div className="space-y-6">

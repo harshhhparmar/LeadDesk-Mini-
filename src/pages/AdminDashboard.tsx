@@ -119,8 +119,8 @@ export function AdminDashboard() {
       >
         <div className="h-16 flex items-center px-6 border-b border-gray-200/50 dark:border-gray-800/50">
           <div className="flex items-center gap-3">
-            <img src="/logo.svg" alt="LeanDesk Logo" className="w-9 h-9 object-contain" />
-            <span className="font-bold text-lg tracking-tight text-gray-900 dark:text-white">LeanDesk</span>
+            <img src="/logo.svg" alt="LeadDesk Logo" className="w-9 h-9 object-contain" />
+            <span className="font-bold text-lg tracking-tight text-gray-900 dark:text-white">LeadDesk</span>
           </div>
         </div>
         
@@ -160,7 +160,7 @@ export function AdminDashboard() {
       {/* Main Content */}
       <main className="flex-1 flex flex-col h-screen overflow-hidden relative z-10">
         <header className="h-16 flex items-center justify-between px-4 sm:px-6 lg:px-8 border-b border-gray-200/50 dark:border-gray-800/50 bg-white/70 dark:bg-gray-900/70 backdrop-blur-xl z-10">
-          <h1 className="text-xl font-semibold text-gray-900 dark:text-white lg:hidden">LeanDesk</h1>
+          <h1 className="text-xl font-semibold text-gray-900 dark:text-white lg:hidden">LeadDesk</h1>
           <h1 className="text-xl font-semibold text-gray-900 dark:text-white hidden lg:block">Overview</h1>
           <div className="flex items-center gap-4">
             <button className="w-8 h-8 flex items-center justify-center rounded-full text-gray-500 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors">
