@@ -25,10 +25,13 @@ export function LoginPage() {
     setLoading(true);
 
     try {
-      // Allow any email/password combo for demo purposes
-      await login(email);
-      toast.success('Login successful');
-      navigate('/admin');
+      if (email === 'harshhhparmar007@gmail.com' && password === '12345@LeadDesk') {
+        await login(email);
+        toast.success('Login successful');
+        navigate('/admin');
+      } else {
+        throw new Error('Invalid email or password');
+      }
     } catch (error: any) {
       toast.error(error.message || 'Invalid credentials');
     } finally {
